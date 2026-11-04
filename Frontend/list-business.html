@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List Your Business - MogotelT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; padding: 40px 20px; }
+        .container { max-width: 650px; margin: auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+        h2 { color: #0f172a; margin-bottom: 10px; }
+        .sub { color: #666; margin-bottom: 30px; }
+        label { display: block; margin: 15px 0 5px; font-weight: 600; color: #333; font-size: 0.9rem; }
+        input, select, textarea {
+            width: 100%; padding: 12px; border: 1px solid #ddd;
+            border-radius: 5px; box-sizing: border-box; font-family: inherit; font-size: 0.95rem;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #2ecc71; }
+        button {
+            width: 100%; padding: 14px; background: #2ecc71; color: white;
+            border: none; border-radius: 5px; font-weight: bold; cursor: pointer;
+            font-size: 1rem; margin-top: 20px;
+        }
+        button:hover { background: #27ae60; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .msg { padding: 15px; border-radius: 5px; margin-top: 20px; text-align: center; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #2ecc71; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        <h2>List Your Business</h2>
+        <p class="sub">Get discovered by customers in your area. Submit your business details and we'll review it within 24 hours.</p>
+
+        <form id="businessForm">
+            <label>Business Name *</label>
+            <input type="text" id="business_name" required>
+
+            <label>Owner's Full Name *</label>
+            <input type="text" id="owner_name" required>
+
+            <label>Service Category *</label>
+            <select id="category_id" required>
+                <option value="">-- Select Category --</option>
+            </select>
+
+            <label>Location / Area *</label>
+            <input type="text" id="location" placeholder="e.g. Burgersfort" required>
+
+            <label>Phone Number *</label>
+            <input type="tel" id="phone" placeholder="0731234567" required>
+
+            <label>WhatsApp Number *</label>
+            <input type="tel" id="whatsapp_number" placeholder="0731234567" required>
+
+            <label>Email (Optional)</label>
+            <input type="email" id="email">
+
+            <label>Description of Services</label>
+            <textarea id="description" rows="4" placeholder="Tell customers what services you offer..."></textarea>
+
+            <button type="submit" id="submitBtn">Submit My Business</button>
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        const API = 'http://localhost:3000/api';
+
+        // Load categories into dropdown
+        fetch(`${API}/providers/meta/categories`)
+            .then(r => r.json())
+            .then(cats => {
+                const select = document.getElementById('category_id');
+                cats.forEach(c => {
+                    select.innerHTML += `<option value="${c.id}">${c.name}</option>`;
+                });
+            });
+
+        // Handle form submission
+        document.getElementById('businessForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const msg = document.getElementById('message');
+            btn.disabled = true;
+            btn.textContent = 'Submitting...';
+            msg.className = '';
+
+            const data = {
+                business_name: document.getElementById('business_name').value,
+                owner_name: document.getElementById('owner_name').value,
+                category_id: document.getElementById('category_id').value,
+                location: document.getElementById('location').value,
+                phone: document.getElementById('phone').value,
+                whatsapp_number: document.getElementById('whatsapp_number').value,
+                email: document.getElementById('email').value,
+                description: document.getElementById('description').value
+            };
+
+            try {
+                const res = await fetch(`${API}/providers/submit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+
+                if (res.ok) {
+                    msg.className = 'msg success';
+                    msg.innerHTML = '✅ <b>Success!</b> Your business has been submitted for review. We will approve it shortly.';
+                    document.getElementById('businessForm').reset();
+                } else {
+                    msg.className = 'msg error';
+                    msg.textContent = '❌ ' + result.error;
+                }
+            } catch (err) {
+                msg.className = 'msg error';
+                msg.textContent = '❌ Server error. Please try again.';
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Submit My Business';
+        });
+    </script>
+</body>
+</html>

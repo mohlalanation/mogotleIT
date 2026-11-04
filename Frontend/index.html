@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MogotelT Local - Find Trusted Service Providers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div><i class="fas fa-map-marker-alt"></i> Serving Burgersfort & Surrounding Areas</div>
+        <div>
+            <i class="fas fa-phone"></i> 073 123 4567
+            <a href="mailto:info@mogotelit.co.za"><i class="fas fa-envelope"></i> info@mogotelit.co.za</a>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">Mogotel<span>IT</span> LOCAL</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#categories">Categories</a>
+            <a href="#providers">Providers</a>
+            <a href="list-business.html" class="btn-green">List Your Business</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Find Trusted <br><span>Local Service Providers</span> Near You</h1>
+            <p>Connect with reliable local professionals for your home, business, and everyday needs.</p>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="What service do you need? (e.g. Plumber)">
+                <input type="text" id="locationInput" placeholder="Enter your area">
+                <button onclick="filterProviders()">Find a Service</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Categories -->
+    <section id="categories" class="section-container">
+        <div class="section-header">
+            <h2>Popular Service Categories</h2>
+        </div>
+        <div class="category-grid" id="categoryGrid"></div>
+    </section>
+
+    <!-- Providers -->
+    <section id="providers" class="section-container">
+        <div class="section-header">
+            <h2>Featured Service Providers</h2>
+        </div>
+        <div class="providers-grid" id="providersGrid">
+            <p>Loading providers...</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-bottom" style="text-align: center; padding: 30px; color: #aaa;">
+            &copy; 2025 MogotelT Consulting & Services (Pty) Ltd. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
